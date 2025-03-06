@@ -1,25 +1,40 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
+import { AppProvider } from './hooks/AppContext';
+
 import HomeScreen from './screens/HomeScreen';
-import ChatScreen from './screens/ChatScreen';
 import TutorialScreen from './screens/TutorialScreen';
-import ExploreScreen from './screens/ExploreScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  return (
-    <PaperProvider>
-      <NavigationContainer>
-        <Tab.Navigator screenOptions={{ headerShown: false }}>
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Chat" component={ChatScreen} />
-          <Tab.Screen name="Tutorial" component={TutorialScreen} />
-          <Tab.Screen name="Explore" component={ExploreScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
-  );
+    return (
+        <AppProvider>
+            <NavigationContainer>
+                <Tab.Navigator
+                    screenOptions={({ route }) => ({
+                        headerShown: false,
+                        tabBarIcon: ({ color, size }) => {
+                            let iconName;
+                            if (route.name === 'Home') {
+                                iconName = 'home';
+                            } else if (route.name === 'Tutorial') {
+                                iconName = 'book';
+                            } else if (route.name === 'Profile') {
+                                iconName = 'person';
+                            }
+                            return <Ionicons name={iconName} size={size} color={color} />;
+                        },
+                    })}
+                >
+                    <Tab.Screen name="Home" component={HomeScreen} />
+                    <Tab.Screen name="Tutorial" component={TutorialScreen} />
+                    <Tab.Screen name="Profile" component={ProfileScreen} />
+                </Tab.Navigator>
+            </NavigationContainer>
+        </AppProvider>
+    );
 }
